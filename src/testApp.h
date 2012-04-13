@@ -1,0 +1,52 @@
+#pragma once
+
+#include "ofMain.h"
+#include "ofxiPhone.h"
+#include "ofxiPhoneExtras.h"
+#include "Dot.h"
+#include "SoundContainer.h"
+#include <vector>
+#include "ofxUI.h"
+#include "ofxShapeBatchRenderer.h"
+
+#define NUM_DOTS 100
+
+class testApp : public ofxiPhoneApp{
+    
+    public:
+        void setScale(int scale);
+        void setup();
+        void update();
+        void draw();
+        void audioOut(float * output, int bufferSize, int nChannels);
+
+        void exit();
+    
+        void touchDown(ofTouchEventArgs & touch);
+        void touchMoved(ofTouchEventArgs & touch);
+        void touchUp(ofTouchEventArgs & touch);
+        void touchDoubleTap(ofTouchEventArgs & touch);
+        void touchCancelled(ofTouchEventArgs & touch);
+	
+        void lostFocus();
+        void gotFocus();
+        void gotMemoryWarning();
+        void deviceOrientationChanged(int newOrientation);
+        
+        void guiEvent(ofxUIEventArgs &e);
+
+        ofFbo nonFloatingPointFbo_GL_RGBA;
+        Dot *dots[NUM_DOTS];
+        int col[NUM_DOTS*NUM_DOTS];
+        ofVec2f lastPos[15];
+        bool retina;
+        SoundContainer container;
+        vector<int> scale;
+        int lastDrag;
+        int currentScale, numDots;
+        float collisionDistance, mDist;
+        ofxUICanvas *gui;
+        ofxShapeBatchRenderer *shapeBatch;
+};
+
+
