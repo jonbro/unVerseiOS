@@ -10,7 +10,7 @@ void testApp::setup(){
     shapeBatch = new ofxShapeBatchRenderer(SBR_LINE, 1000, 1);
     shapeBatch->setColor(255, 255, 255);
     ofFbo::Settings s;
-    
+    lastTime = 0;
     s.width				= 1024;
     s.height			= 1024;
     s.internalformat = GL_RGBA;
@@ -58,6 +58,7 @@ void testApp::setup(){
 
     ofSoundStreamSetup(2, 0, this, 22050, 512, 4);
     ofSoundStreamStart();
+    ofSetFrameRate(60);
 }
 
 void testApp::setScale(int _scale) {
@@ -85,6 +86,9 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
+    currentTime = ofGetElapsedTimef();
+    timeMultiplier = 60.0*(ofGetElapsedTimef()-lastTime);
+    lastTime = currentTime;
     // clear the background
     ofSetColor(0, 0, 0);
     ofRect(0, 0, ofGetWidth(), ofGetHeight());
@@ -92,7 +96,7 @@ void testApp::draw(){
     // BEGIN FBO
     nonFloatingPointFbo_GL_RGBA.begin();
     // clear out the fbo a bit
-    ofSetColor(0, 0, 0, 10);
+    ofSetColor(0, 0, 0, 10.0*timeMultiplier);
     ofRect(0, 0, ofGetWidth(), ofGetHeight());
     ofSetColor(255, 255, 255);
     shapeBatch->clear();
@@ -102,7 +106,7 @@ void testApp::draw(){
     bool played = false;
     // first update the positions
     for (int i=0; i<numDots; i++) {
-        dots[i]->update();
+        dots[i]->update(timeMultiplier);
     }
     // then handle the collisions
     for (int i=0; i<numDots; i++) {

@@ -9,10 +9,10 @@ public:
         pos.set(x, y);
         vel.set((ofRandom(maxSpeed)-maxSpeed)*0.5, (ofRandom(maxSpeed)-maxSpeed)*0.5);
     };
-    void update();
+    void update(float timeMultiplier);
     void draw(ofxShapeBatchRenderer *shapes);
     void slowDown();
     void wrapToScreen();
-    ofVec2f pos, last_pos, vel;
+    ofVec2f pos, last_pos, vel, timeVel;
     float maxSpeed, friction;
 };

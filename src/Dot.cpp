@@ -1,8 +1,10 @@
 #include "Dot.h"
 
-void Dot::update(){
+void Dot::update(float timeMultiplier){
     last_pos.set(pos);
-    pos += vel;
+    timeVel.set(vel);
+    timeVel *= timeMultiplier;
+    pos += timeVel;
 }
 void Dot::draw(ofxShapeBatchRenderer *shapes){
     ofSetColor(255, 255, 255);

@@ -45,6 +45,7 @@ class testApp : public ofxiPhoneApp{
         int lastDrag;
         int currentScale, numDots;
         float collisionDistance, mDist;
+        float lastTime, currentTime, timeMultiplier;
         ofxUICanvas *gui;
         ofxShapeBatchRenderer *shapeBatch;
 };
