@@ -9,6 +9,11 @@ void testApp::setup(){
 	ofRegisterTouchEvents(this);
     shapeBatch = new ofxShapeBatchRenderer(SBR_LINE, 1000, 1);
     shapeBatch->setColor(255, 255, 255);
+    
+    int wrapWidth = 320;
+    int wrapHeight = 480;
+    screenMult.set(ofGetWidth()/(float)wrapWidth, ofGetHeight()/(float)wrapHeight);
+
     ofFbo::Settings s;
     lastTime = 0;
     s.width				= 1024;
@@ -58,7 +63,7 @@ void testApp::setup(){
 
     ofSoundStreamSetup(2, 0, this, 22050, 512, 4);
     ofSoundStreamStart();
-    ofSetFrameRate(60);
+    //ofSetFrameRate(60);
 }
 
 void testApp::setScale(int _scale) {
@@ -133,7 +138,7 @@ void testApp::draw(){
                         played = true;
                     }
                     col[lineCount] = 10;
-                    shapeBatch->addLine(v1->pos, v2->pos);
+                    shapeBatch->addLine(v1->pos*screenMult, v2->pos*screenMult);
                 }
             }else if(col[lineCount]!=0){
                 col[lineCount] -= 1;
@@ -178,6 +183,7 @@ void testApp::touchDown(ofTouchEventArgs & touch){
     }
     lastDrag = ofGetElapsedTimeMillis();
     lastPos[touch.id].set(touch.x, touch.y);
+    lastPos[touch.id] /= screenMult;
     if(touch.id == 2){
         gui->toggleVisible();
     }
@@ -188,6 +194,7 @@ void testApp::touchMoved(ofTouchEventArgs & touch){
     lastDrag = ofGetElapsedTimeMillis();
 
     ofVec2f dist = ofVec2f(touch.x, touch.y);
+    dist /= screenMult;
     ofVec2f fpos = ofVec2f(dist);
     dist -= lastPos[touch.id];
     for (int i=0; i<numDots; i++) {
@@ -201,6 +208,7 @@ void testApp::touchMoved(ofTouchEventArgs & touch){
     }
 
     lastPos[touch.id].set(touch.x, touch.y);
+    lastPos[touch.id] /= screenMult;
 }
 
 //--------------------------------------------------------------

@@ -39,6 +39,7 @@ class testApp : public ofxiPhoneApp{
         Dot *dots[NUM_DOTS];
         int col[NUM_DOTS*NUM_DOTS];
         ofVec2f lastPos[15];
+        ofPoint screenMult;
         bool retina;
         SoundContainer container;
         vector<int> scale;

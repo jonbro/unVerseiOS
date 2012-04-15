@@ -8,19 +8,19 @@ void Dot::update(float timeMultiplier){
 }
 void Dot::draw(ofxShapeBatchRenderer *shapes){
     ofSetColor(255, 255, 255);
-    shapes->addLine(last_pos, pos);
+    shapes->addLine(last_pos*screenMult, pos*screenMult);
     wrapToScreen();
 }
 void Dot::wrapToScreen(){
-    if(pos.x>ofGetWidth()){
+    if(pos.x>wrapWidth){
         pos.x = 0;
     }else if(pos.x<0){
-        pos.x = ofGetWidth();
+        pos.x = wrapWidth;
     }
-    if(pos.y>ofGetHeight()){
+    if(pos.y>wrapHeight){
         pos.y = 0;
     }else if(pos.y<0){
-        pos.y = ofGetHeight();
+        pos.y = wrapHeight;
     }
 }
 void Dot::slowDown()
