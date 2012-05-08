@@ -5,19 +5,20 @@ class Dot{
 public:
     Dot(int x, int y){
         maxSpeed = 10;
-        friction = 0.992;
+        friction = 0.985;
         pos.set(x, y);
-        vel.set((ofRandom(maxSpeed)-maxSpeed)*0.5, (ofRandom(maxSpeed)-maxSpeed)*0.5);
+        vel.set(0,0);
         wrapWidth = 320;
         wrapHeight = 480;
         screenMult.set(ofGetWidth()/(float)wrapWidth, ofGetHeight()/(float)wrapHeight);
-        cout << "screen width: " << ofGetWidth() << endl;
+        drawing = false;
     };
     void update(float timeMultiplier);
     void draw(ofxShapeBatchRenderer *shapes);
     void slowDown();
     void wrapToScreen();
-    ofVec2f pos, last_pos, vel, timeVel, screenMult;
+    ofPoint pos, last_pos, vel, timeVel, screenMult;
     int wrapWidth, wrapHeight;
+    bool drawing;
     float maxSpeed, friction;
 };

@@ -7,9 +7,11 @@ void Dot::update(float timeMultiplier){
     pos += timeVel;
 }
 void Dot::draw(ofxShapeBatchRenderer *shapes){
-    ofSetColor(255, 255, 255);
-    shapes->addLine(last_pos*screenMult, pos*screenMult);
-    wrapToScreen();
+    if(drawing){
+        ofSetColor(255, 255, 255);
+        shapes->addLine(last_pos*screenMult, pos*screenMult);
+        wrapToScreen();
+    }
 }
 void Dot::wrapToScreen(){
     if(pos.x>wrapWidth){

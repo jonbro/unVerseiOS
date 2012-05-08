@@ -8,9 +8,14 @@
 #include <vector>
 #include "ofxUI.h"
 #include "ofxShapeBatchRenderer.h"
+#include "TitleScreen.h"
 
 #define NUM_DOTS 100
-
+enum appState{
+    ONTITLE,
+    ADDINGDOTS,
+    MAINSTATE
+};
 class testApp : public ofxiPhoneApp{
     
     public:
@@ -18,6 +23,7 @@ class testApp : public ofxiPhoneApp{
         void setup();
         void update();
         void draw();
+        void drawDots(float timeMultiplier);
         void audioOut(float * output, int bufferSize, int nChannels);
 
         void exit();
@@ -34,7 +40,8 @@ class testApp : public ofxiPhoneApp{
         void deviceOrientationChanged(int newOrientation);
         
         void guiEvent(ofxUIEventArgs &e);
-
+        TitleScreen *title;
+    
         ofFbo nonFloatingPointFbo_GL_RGBA;
         Dot *dots[NUM_DOTS];
         int col[NUM_DOTS*NUM_DOTS];
@@ -47,8 +54,11 @@ class testApp : public ofxiPhoneApp{
         int currentScale, numDots;
         float collisionDistance, mDist;
         float lastTime, currentTime, timeMultiplier;
+        ofImage titleImg;
+        appState state;
         ofxUICanvas *gui;
         ofxShapeBatchRenderer *shapeBatch;
+        float addRate;
 };
 
 

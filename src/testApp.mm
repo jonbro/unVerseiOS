@@ -9,11 +9,23 @@ void testApp::setup(){
 	ofRegisterTouchEvents(this);
     shapeBatch = new ofxShapeBatchRenderer(SBR_LINE, 1000, 1);
     shapeBatch->setColor(255, 255, 255);
-    
+    title = new TitleScreen();
     int wrapWidth = 320;
     int wrapHeight = 480;
     screenMult.set(ofGetWidth()/(float)wrapWidth, ofGetHeight()/(float)wrapHeight);
-
+    int swidth = ofGetWidth();
+    if(swidth == 320){
+        titleImg.loadImage("UNVERSE_1.png");
+    }else if(swidth == 640){
+        titleImg.loadImage("UNVERSE_0.png");
+    }else if(swidth == 768){
+        titleImg.loadImage("UNVERSE_2.png");
+    }else{
+        titleImg.loadImage("UNVERSE_3.png");
+    }
+    
+    state = ONTITLE;
+    
     ofFbo::Settings s;
     lastTime = 0;
     s.width				= 1024;
@@ -64,6 +76,7 @@ void testApp::setup(){
     ofSoundStreamSetup(2, 0, this, 22050, 512, 4);
     ofSoundStreamStart();
     //ofSetFrameRate(60);
+    addRate = 0.35;
 }
 
 void testApp::setScale(int _scale) {
@@ -87,17 +100,39 @@ void testApp::setScale(int _scale) {
 }
 //--------------------------------------------------------------
 void testApp::update(){
-}
+    if(state == ADDINGDOTS){
+        if(addRate > 0){
+            addRate -= ofGetElapsedTimef();
+        }else{
+            // find the first unassigned dot, and assign it
+            for (int i = 0; i<NUM_DOTS; i++) {
+                if(!dots[i]->drawing){
+                    Dot *v = dots[i];
+                    if(!title->assignPoint(&(v->pos))){
+                        state = MAINSTATE;
+                    }
+                    v->drawing = true;
+                    v->vel.set(-ofRandom(v->maxSpeed)*0.25-v->maxSpeed*0.25, -ofRandom(v->maxSpeed)*0.25-v->maxSpeed*0.25);
+                    float xd = v->pos.x;
+                    float yd = v->pos.y;
+                    int note = fmax(0, fmin(scale.size()*(1.0-yd/ofGetHeight()), scale.size()));
 
-//--------------------------------------------------------------
-void testApp::draw(){
+                    container.addTone(440, scale[note], -1, 2.0*xd/ofGetWidth()-1, 1, 0.5);
+                    addRate = 0.35;
+                    break;
+                }
+            }
+        }
+    }
+}
+void testApp::draw()
+{
     currentTime = ofGetElapsedTimef();
     timeMultiplier = 60.0*(ofGetElapsedTimef()-lastTime);
     lastTime = currentTime;
-    // clear the background
-    ofSetColor(0, 0, 0);
+    // clear the background    
+    ofSetColor(0, 0, 0, 255);
     ofRect(0, 0, ofGetWidth(), ofGetHeight());
-    
     // BEGIN FBO
     nonFloatingPointFbo_GL_RGBA.begin();
     // clear out the fbo a bit
@@ -105,6 +140,25 @@ void testApp::draw(){
     ofRect(0, 0, ofGetWidth(), ofGetHeight());
     ofSetColor(255, 255, 255);
     shapeBatch->clear();
+    if(state == ONTITLE){
+        titleImg.draw(0, 0);
+    }
+    if(state == ONTITLE || state == ADDINGDOTS){
+        title->draw(shapeBatch);
+    }
+    drawDots(timeMultiplier);
+    shapeBatch->draw();
+    nonFloatingPointFbo_GL_RGBA.end();
+	// END FBO
+    ofSetColor(255, 255, 255);  // "color" for the fbo
+    nonFloatingPointFbo_GL_RGBA.draw(0, 0); // 420px from the left, 10px from the top
+    if(gui->isEnabled()){
+        string fpsStr = "frame rate: "+ofToString(ofGetFrameRate(), 2);
+        ofDrawBitmapString(fpsStr, 0,ofGetHeight()-10);
+    }
+}
+//--------------------------------------------------------------
+void testApp::drawDots(float timeMultiplier){
     // handle drawing the lines
     float a = 0.5;
     int lineCount = 0;
@@ -122,7 +176,7 @@ void testApp::draw(){
 			float xd = v1->pos.x - v2->pos.x;
             float yd = v1->pos.y - v2->pos.y;
             float d = v1->pos.distance(v2->pos);
-            if(d < collisionDistance && d != 0)
+            if(v1->drawing && v2->drawing && d < collisionDistance && d != 0)
             {
                 // draw a line between the dots, and push the dots away from one another
                 v1->vel.x = v1->vel.x + a*xd/d;
@@ -153,15 +207,7 @@ void testApp::draw(){
     for (int i=0; i<numDots; i++) {
         dots[i]->draw(shapeBatch);
     }
-    shapeBatch->draw();
-    nonFloatingPointFbo_GL_RGBA.end();
-	// END FBO
-    ofSetColor(255, 255, 255);  // "color" for the fbo
-    nonFloatingPointFbo_GL_RGBA.draw(0, 0); // 420px from the left, 10px from the top
     
-    string fpsStr = "frame rate: "+ofToString(ofGetFrameRate(), 2);
-    ofDrawBitmapString(fpsStr, 100,100);
-
 }
 //--------------------------------------------------------------
 void testApp::audioOut(float * output, int bufferSize, int nChannels){
@@ -176,6 +222,9 @@ void testApp::exit(){
 
 //--------------------------------------------------------------
 void testApp::touchDown(ofTouchEventArgs & touch){
+    if (state == ONTITLE) {
+        state = ADDINGDOTS;
+    }
     if(ofGetElapsedTimeMillis()-lastDrag > 2000){
         currentScale++;
         currentScale = currentScale%2;
