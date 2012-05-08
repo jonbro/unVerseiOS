@@ -5,10 +5,7 @@ void SoundContainer::processAudioAdd(float * output, int bufferSize, int nChanne
     clearBuffer(output, bufferSize, nChannels);
     int n = _actives.size();
     while( --n > -1 ) {
-        if( _actives[n]->processAudioAdd(output, bufferSize, nChannels)){
-            delete (_actives[n]);
-            _actives.erase(_actives.begin()+n);
-        }
+        _actives[n]->processAudioAdd(output, bufferSize, nChannels);
     }
     for (int i=0; i<bufferSize; i++) {
         sourceLeft = output[i*2];
@@ -34,8 +31,8 @@ void SoundContainer::processAudioAdd(float * output, int bufferSize, int nChanne
         
         
         // write sound
-        output[i*2] =  sourceLeft	+ echo.mix * delayLeft;
-        output[i*2+1] = sourceRight	+ echo.mix * delayRight;
+        output[i*2] =  fmax(-1.0, fmin(1.0, sourceLeft	+ echo.mix * delayLeft));
+        output[i*2+1] = fmax(-1.0, fmin(1.0, sourceRight	+ echo.mix * delayRight));
     }
 
 }
@@ -52,6 +49,8 @@ void SoundContainer::clearBuffer(float * output, int bufferSize, int nChannels) 
 }
 void SoundContainer::addTone( float freq , int note , int octave , float pan , float duration , float volume )
 {
-    Tone *tone = new Tone(freq , note , octave , pan , duration , volume/(64*duration*duration));
-    _actives.push_back(tone);
+    
+//        Tone *tone = new Tone(freq , note , octave , pan , duration , volume/(64*duration*duration));
+    _actives[currentTone]->Trigger(freq , note , octave , pan , duration , volume/(64*duration*duration));
+    currentTone = (currentTone+1)%50;
 }

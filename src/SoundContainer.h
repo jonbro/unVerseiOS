@@ -19,7 +19,11 @@ public:
         for(int i=0;i<_delaySize*2;i++) {
             _delayLine.push_back(0);
         }
+        currentTone = 0;
         _delayIndex = 0;
+        for (int i=0; i<50; i++) {
+            _actives.push_back(new Tone());
+        }
     };
     void processAudioAdd(float * output, int bufferSize, int nChannels);
     void addTone( float freq , int note , int octave , float pan , float duration , float volume );
@@ -28,5 +32,6 @@ private:
     std::vector<float> _delayLine;
     int _delaySize, _delayIndex;
     std::vector<Tone *> _actives;
+    int currentTone;
     void clearBuffer(float * output, int bufferSize, int nChannels);
 };

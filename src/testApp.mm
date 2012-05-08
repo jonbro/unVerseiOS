@@ -194,8 +194,8 @@ void testApp::drawDots(float timeMultiplier){
                     if(!played){
                         xd = (v1->pos.x+v2->pos.x)*.5;
                         yd = (v1->pos.y+v2->pos.y)*.5;
-                        int note = fmax(0, fmin(scale.size()*(1.0-yd/ofGetHeight()), scale.size()));
-                        container.addTone(440, scale[note], -1, 2.0*xd/ofGetWidth()-1, 1, fmin(1.0, .2+.8*(d/50.0)));
+                        int note = fmax(0, fmin(scale.size()*(1.0-yd/480.0), scale.size()));
+                        container.addTone(440, scale[note], -1, 2.0*xd/320.0-1, 1, fmin(1.0, .2+.8*(d/50.0)));
                         played = true;
                     }
                     col[lineCount] = 10;
