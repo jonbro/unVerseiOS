@@ -14,6 +14,10 @@ void testApp::setup(){
     int wrapHeight = 480;
     screenMult.set(ofGetWidth()/(float)wrapWidth, ofGetHeight()/(float)wrapHeight);
     int swidth = ofGetWidth();
+    ofFbo::Settings s;
+    s.width				= 1024;
+    s.height			= 1024;
+    
     if(swidth == 320){
         titleImg.loadImage("UNVERSE_1.png");
     }else if(swidth == 640){
@@ -22,14 +26,13 @@ void testApp::setup(){
         titleImg.loadImage("UNVERSE_2.png");
     }else{
         titleImg.loadImage("UNVERSE_3.png");
+        s.height = 2048;
+        s.width = 2048;
     }
     
     state = ONTITLE;
     
-    ofFbo::Settings s;
     lastTime = 0;
-    s.width				= 1024;
-    s.height			= 1024;
     s.internalformat = GL_RGBA;
 	nonFloatingPointFbo_GL_RGBA.allocate(s);
     nonFloatingPointFbo_GL_RGBA.begin();
