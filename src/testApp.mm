@@ -64,7 +64,11 @@ void testApp::setup(){
         width *= 2;
         height *= 2;
     }
-    gui = new ofxUICanvas(0,0,320,320);		//ofxUICanvas(float x, float y, float width, float height)		
+    if(swidth > 768){
+        width *= 2;
+        height *= 2;
+    }
+    gui = new ofxUICanvas(0,0,ofGetWidth(),ofGetHeight());		//ofxUICanvas(float x, float y, float width, float height)		
     gui->addWidgetDown(new ofxUILabel("UNVERSE", OFX_UI_FONT_LARGE)); 
     gui->addWidgetDown(new ofxUISlider(width,height,0.0,60,collisionDistance,"COLLISION DISTANCE")); 
     gui->addWidgetDown(new ofxUISlider(width,height,50,200,mDist,"TOUCH DISTANCE")); 
