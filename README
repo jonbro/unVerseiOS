@@ -1,0 +1,4 @@
+This might not run with the newest version of openframeworks, but that is a good starting point
+you will also need the following addons
+https://github.com/stfj/ofxShapeBatchRenderer
+https://github.com/rezaali/ofxUI
