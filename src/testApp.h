@@ -18,47 +18,47 @@ enum appState{
 };
 class testApp : public ofxiPhoneApp{
     
-    public:
-        void setScale(int scale);
-        void setup();
-        void update();
-        void draw();
-        void drawDots(float timeMultiplier);
-        void audioOut(float * output, int bufferSize, int nChannels);
-
-        void exit();
+public:
+    void setScale(int scale);
+    void setup();
+    void update();
+    void draw();
+    void drawDots(float timeMultiplier);
+    void audioOut(float * output, int bufferSize, int nChannels);
     
-        void touchDown(ofTouchEventArgs & touch);
-        void touchMoved(ofTouchEventArgs & touch);
-        void touchUp(ofTouchEventArgs & touch);
-        void touchDoubleTap(ofTouchEventArgs & touch);
-        void touchCancelled(ofTouchEventArgs & touch);
+    void exit();
+    
+    void touchDown(ofTouchEventArgs & touch);
+    void touchMoved(ofTouchEventArgs & touch);
+    void touchUp(ofTouchEventArgs & touch);
+    void touchDoubleTap(ofTouchEventArgs & touch);
+    void touchCancelled(ofTouchEventArgs & touch);
 	
-        void lostFocus();
-        void gotFocus();
-        void gotMemoryWarning();
-        void deviceOrientationChanged(int newOrientation);
-        
-        void guiEvent(ofxUIEventArgs &e);
-        TitleScreen *title;
+    void lostFocus();
+    void gotFocus();
+    void gotMemoryWarning();
+    void deviceOrientationChanged(int newOrientation);
     
-        ofFbo nonFloatingPointFbo_GL_RGBA;
-        Dot *dots[NUM_DOTS];
-        int col[NUM_DOTS*NUM_DOTS];
-        ofVec2f lastPos[15];
-        ofPoint screenMult;
-        bool retina;
-        SoundContainer container;
-        vector<int> scale;
-        int lastDrag;
-        int currentScale, numDots;
-        float collisionDistance, mDist;
-        float lastTime, currentTime, timeMultiplier;
-        ofImage titleImg;
-        appState state;
-        ofxUICanvas *gui;
-        ofxShapeBatchRenderer *shapeBatch;
-        float addRate;
+    void guiEvent(ofxUIEventArgs &e);
+    TitleScreen *title;
+    
+    ofFbo nonFloatingPointFbo_GL_RGBA;
+    Dot *dots[NUM_DOTS];
+    int col[NUM_DOTS*NUM_DOTS];
+    ofVec2f lastPos[15];
+    ofPoint screenMult;
+    bool retina;
+    SoundContainer container;
+    vector<int> scale;
+    int lastDrag;
+    int currentScale, numDots;
+    float collisionDistance, mDist;
+    float lastTime, currentTime, timeMultiplier;
+    ofImage titleImg;
+    appState state;
+    ofxUICanvas *gui;
+    ofxShapeBatchRenderer *shapeBatch;
+    float addRate;
 };
 
 

@@ -38,7 +38,7 @@ void testApp::setup(){
     nonFloatingPointFbo_GL_RGBA.begin();
 	ofClear(255,255,255, 0);
     nonFloatingPointFbo_GL_RGBA.end();
-
+    
     ofEnableAlphaBlending();
 	ofSetFrameRate(60);
     for (int i=0; i<NUM_DOTS; i++) {
@@ -78,8 +78,8 @@ void testApp::setup(){
     gui->disable();
     
     ofAddListener(gui->newGUIEvent, this, &testApp::guiEvent); 
-    gui->loadSettings("GUI/guiSettings.xml"); 
-
+    //gui->loadSettings("GUI/guiSettings.xml"); 
+    
     ofSoundStreamSetup(2, 0, this, 22050, 512, 4);
     ofSoundStreamStart();
     //ofSetFrameRate(60);
@@ -103,7 +103,7 @@ void testApp::setScale(int _scale) {
             scale.push_back(7+o*12);
         }
     }
-
+    
 }
 //--------------------------------------------------------------
 void testApp::update(){
@@ -123,7 +123,7 @@ void testApp::update(){
                     float xd = v->pos.x;
                     float yd = v->pos.y;
                     int note = fmax(0, fmin(scale.size()*(1.0-yd/ofGetHeight()), scale.size()));
-
+                    
                     container.addTone(440, scale[note], -1, 2.0*xd/ofGetWidth()-1, 1, 0.5);
                     addRate = 0.35;
                     break;
@@ -223,7 +223,7 @@ void testApp::audioOut(float * output, int bufferSize, int nChannels){
 
 //--------------------------------------------------------------
 void testApp::exit(){
-    gui->saveSettings("GUI/guiSettings.xml");     
+    //gui->saveSettings("GUI/guiSettings.xml");     
     delete gui; 
 }
 
@@ -248,7 +248,7 @@ void testApp::touchDown(ofTouchEventArgs & touch){
 //--------------------------------------------------------------
 void testApp::touchMoved(ofTouchEventArgs & touch){
     lastDrag = ofGetElapsedTimeMillis();
-
+    
     ofVec2f dist = ofVec2f(touch.x, touch.y);
     dist /= screenMult;
     ofVec2f fpos = ofVec2f(dist);
@@ -262,7 +262,7 @@ void testApp::touchMoved(ofTouchEventArgs & touch){
             v->vel.y = v->vel.y+.001*(mDist-d)*dist.y;
         }
     }
-
+    
     lastPos[touch.id].set(touch.x, touch.y);
     lastPos[touch.id] /= screenMult;
 }
@@ -274,12 +274,12 @@ void testApp::touchUp(ofTouchEventArgs & touch){
 
 //--------------------------------------------------------------
 void testApp::touchDoubleTap(ofTouchEventArgs & touch){
-
+    
 }
 
 //--------------------------------------------------------------
 void testApp::touchCancelled(ofTouchEventArgs & touch){
-
+    
 }
 
 //--------------------------------------------------------------
