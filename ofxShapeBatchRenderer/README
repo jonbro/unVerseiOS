@@ -1,0 +1,1 @@
+ofxShapeBatchRenderer is deferred renderer for most basic ofShape calls. It works as nearly a swap in replacement and is super handy for iphone (or any openGLES development)
